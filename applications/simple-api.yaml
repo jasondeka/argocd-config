@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: simple-api
+  namespace: default
+spec:
+  project: development-apis
+  source:
+    helm:
+      valueFiles:
+        - values.yaml
+    repoURL: https://github.com/jasondeka/application-manifests
+    targetRevision: HEAD
+    path: 001-simple-api/simple-api
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy: 
+    automated: {}
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
